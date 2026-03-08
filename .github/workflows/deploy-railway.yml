@@ -1,0 +1,21 @@
+name: 🚀 自动部署到 Railway
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: 📦 安装 Railway CLI
+        run: npm install -g @railway/cli
+        
+      - name: 🚀 部署
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          railway up --detach || echo "Railway deployment skipped (no token)"

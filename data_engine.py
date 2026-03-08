@@ -36,8 +36,8 @@ class FullSovereignEngine:
         return score.clip(0, 100)
 
     @staticmethod
-    def get_omni_data():
-        logger.info("📡 [OMNI]: 正在启动全维度数据采集协议...")
+    def get_omni_data(force_refresh: bool = False):
+        logger.info(f"📡 [OMNI]: 正在启动全维度数据采集协议 (强制刷新: {force_refresh})...")
         statsd = get_statsd() # 📡 Datadog 监控
         
         # 初始化基础结构
@@ -46,8 +46,8 @@ class FullSovereignEngine:
         macro = {}
         vitals = {}
 
-        # 1. 获取全盘个股（多源路由，自动切换 Zyte/Sina/Local）
-        df_raw = get_realtime_quotes()
+        # 1. 获取全盘个股（支持强制刷新逻辑）
+        df_raw = get_realtime_quotes(force_refresh=force_refresh)
         if df_raw is not None and not df_raw.empty:
             df_raw['CORE_SCORE'] = FullSovereignEngine._compute_core_score(df_raw)
             

@@ -1,0 +1,36 @@
+
+version: '3.8'
+
+services:
+  # 1. 奇点量化引擎 (Singularity Engine)
+  quant-engine:
+    build: .
+    restart: always
+    env_file: .env
+    environment:
+      - DATADOG_AGENT_HOST=datadog-agent
+    volumes:
+      - .:/app
+    depends_on:
+      - datadog-agent
+
+  # 2. 数据科学专家 (Camber Helper)
+  camber-expert:
+    image: python:3.11-slim
+    volumes:
+      - ./camber_expert:/app
+    working_dir: /app
+    command: ["python", "batch_ask_expert.py"]
+    env_file: .env
+
+  # 3. Datadog 监控代理 (指揮中心)
+  datadog-agent:
+    image: gcr.io/datadoghq/agent:7
+    restart: always
+    environment:
+      - DD_API_KEY=${DD_API_KEY}
+      - DD_SITE=datadoghq.com
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro

@@ -1,45 +1,37 @@
-# Python-generated files
-__pycache__/
-*.py[oc]
-build/
-dist/
-wheels/
-*.egg-info
 
-# Virtual environments
-.venv
+# 🌌 RUIRAN QUANT: SECURITY PROTOCOL
 
-# Secrets and credentials
+# 1. 密钥文件 (绝对禁止上传)
 .env
 *.key
-*.pub
 singularity_key
 singularity_key.pub
 
-# Logs
-*.log
-daemon.log
-pipeline.log
-debug_output.log
-crash_report.log
-
-# Cache and data files
-*.csv
-*.json
-*.tar.gz
-last_market_snap.csv
+# 2. 运行数据与缓存 (无需上传)
+daily_quota.json
 full_market_cache.csv
+*.log
 omni_matrix_snap.csv
+last_market_snap.csv
 cloud_decision.json
 tuning_data.jsonl
 
-# IDE
-.vscode/
-.idea/
+# 3. Python 虚拟环境
+.venv/
+__pycache__/
+*.pyc
 
-# OS
+# 4. 系统与工具
 .DS_Store
-Thumbs.db
+.idea/
+.vscode/
+.doppler/
 
-# Local settings
-.python-version
+# 5. 构建产物
+*.egg-info/
+dist/
+build/
+
+# 6. 备份文件
+*.tar.gz
+*.bak

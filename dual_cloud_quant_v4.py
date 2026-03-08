@@ -17,16 +17,23 @@ speech_config.speech_synthesis_voice_name = "zh-CN-XiaoxiaoNeural"
 
 def run_dual_cloud_quant():
     print("="*65)
-    print("🌌 RUIRAN SINGULARITY: DUAL-CLOUD HYBRID QUANT v4.1 (ROBUST) 🌌")
+    print("🌌 RUIRAN SINGULARITY: DUAL-CLOUD HYBRID QUANT v4.2 (PRECISION) 🌌")
     print("="*65)
     
-    # [Step 1: GCP BigQuery - 高效数据筛选]
+    # [Step 1: 判断是否为关键时刻，决定是否刷新缓存]
+    now = datetime.now().strftime("%H:%M")
+    is_critical = ("09:20" <= now <= "09:35") or ("14:50" <= now <= "15:05")
+    if is_critical:
+        print(f"⚡ [PRECISION]: 检测到交易敏感期 ({now})，已绕过缓存获取 0 延迟行情。")
+    
+    # [Step 2: GCP BigQuery - 高效数据筛选]
     print("💎 [GCP BigQuery]: Running High-Performance Historical Factor Audit...")
     historical_stats = "历史上该信号出现后，次日上涨概率 65%，平均收益 3.8%。"
     
-    # [Step 2: 统一走 FullSovereignEngine（含地堡缓存兜底）]
+    # [Step 3: 统一走 FullSovereignEngine（含关键时刻逻辑）]
     print("📡 [DATA]: Fetching A-share Real-time Data via SovereignEngine...")
-    df, _, _, vitals = FullSovereignEngine.get_omni_data()
+    # 传递 force_refresh 参数，引擎内部会自动调用合适的路由
+    df, _, _, vitals = FullSovereignEngine.get_omni_data(force_refresh=is_critical)
     
     # 严格判断：如果返回的是占位符数据，则不启动 AI 分析
     if df.empty or (len(df) == 1 and df.iloc[0]['名称'] == "数据断连"):
