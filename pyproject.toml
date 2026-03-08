@@ -1,0 +1,26 @@
+[project]
+name = "ai-test"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "akshare>=1.18.35",
+    "azure-cognitiveservices-speech>=1.48.2",
+    "azure-cosmos>=4.15.0",
+    "flask>=3.1.3",
+    "google-cloud-aiplatform>=1.140.0",
+    "google-cloud-bigquery>=3.40.1",
+    "google-cloud-language>=2.19.0",
+    "google-cloud-storage>=3.9.0",
+    "gunicorn>=25.1.0",
+    "matplotlib>=3.10.8",
+    "numpy>=2.4.2",
+    "openai>=2.26.0",
+    "pandas>=3.0.1",
+    "python-dotenv>=1.2.2",
+    "yagmail>=0.15.293",
+    "datadog>=0.49.0",
+    "requests>=2.31.0",
+    "scrapy>=2.11.0",
+]

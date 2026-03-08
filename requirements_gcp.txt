@@ -1,0 +1,9 @@
+akshare>=1.18.35
+google-cloud-bigquery>=3.40.1
+google-cloud-aiplatform>=1.140.0
+google-cloud-storage>=3.9.0
+pandas>=2.0.0
+numpy>=1.26.0
+python-dotenv>=1.2.2
+db-dtypes>=1.0.0
+pyarrow>=14.0.0

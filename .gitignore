@@ -1,0 +1,45 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Secrets and credentials
+.env
+*.key
+*.pub
+singularity_key
+singularity_key.pub
+
+# Logs
+*.log
+daemon.log
+pipeline.log
+debug_output.log
+crash_report.log
+
+# Cache and data files
+*.csv
+*.json
+*.tar.gz
+last_market_snap.csv
+full_market_cache.csv
+omni_matrix_snap.csv
+cloud_decision.json
+tuning_data.jsonl
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local settings
+.python-version

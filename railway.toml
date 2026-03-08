@@ -1,0 +1,6 @@
+# Railway 部署配置
+[build]
+builder = "nix"
+
+[deploy]
+startCommand = "python main.py"
