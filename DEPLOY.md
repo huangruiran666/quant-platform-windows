@@ -1,71 +1,90 @@
-# 🚀 一键部署指南
+# 🚀 一键部署指南 - 奇点量化平台
 
-## 项目类型
-Python 量化交易平台（Flask + 数据分析 + AI）
+## ✅ 已完成配置
+
+- [x] Git 仓库初始化
+- [x] 部署配置文件创建 (Procfile, railway.toml, render.yaml)
+- [x] .gitignore 配置（保护敏感信息）
+- [x] Railway CLI 安装
 
 ---
 
-## 方案 1：Railway（推荐 ⭐）
+## 📋 部署方式对比
 
-### 步骤 1：登录 Railway
+| 方式 | 适合 | 部署命令 |
+|------|------|----------|
+| **Railway** | 快速测试/演示 | `railway up` |
+| **Render** | 长期运行 | GitHub 自动部署 |
+| **本地运行** | 开发调试 | `python dashboard.py` |
+
+---
+
+## 🎯 方案 1：Railway 一键部署（最快）
+
+### 步骤 1：推送到 GitHub
 
 ```bash
 cd C:\Users\huangruiran\ai_test
+
+# 在 GitHub 上创建新仓库，然后：
+git remote add origin https://github.com/你的用户名/quant-platform.git
+git branch -M main
+git push -u origin main
+```
+
+### 步骤 2：登录 Railway
+
+```bash
 railway login
 ```
 
-会打开浏览器，用 **GitHub 账号登录**。
+浏览器会自动打开，用 GitHub 账号登录。
 
-### 步骤 2：初始化项目
-
-```bash
-railway init
-```
-
-选择：
-- `Create new project`
-- 输入项目名称（如 `quant-platform`）
-
-### 步骤 3：一键部署
+### 步骤 3：部署
 
 ```bash
 railway up
 ```
 
-自动完成：
-- ✅ 检测 Python 项目
-- ✅ 安装依赖（requirements.txt / pyproject.toml）
-- ✅ 构建 Docker 镜像
-- ✅ 部署到云端
+选择：
+1. `Deploy from GitHub repo`
+2. 选择你的仓库 `quant-platform`
 
-### 步骤 4：获取访问地址
+### 步骤 4：设置环境变量
+
+在 Railway 控制台添加：
+
+```
+AZURE_OPENAI_KEY=你的密钥
+AZURE_OPENAI_ENDPOINT=你的端点
+GOOGLE_APPLICATION_CREDENTIALS=你的凭证
+```
+
+### 步骤 5：获取访问地址
 
 ```bash
 railway domain
 ```
 
-得到类似：`https://quant-platform.railway.app`
+得到：`https://quant-platform.railway.app`
 
 ---
 
-## 方案 2：Render（备选）
+## 🎯 方案 2：Render 自动部署
 
-### 步骤 1：创建 GitHub 仓库
+### 步骤 1：访问 Render
 
-```bash
-cd C:\Users\huangruiran\ai_test
-git remote add origin https://github.com/你的用户名/quant-platform.git
-git push -u origin main
-```
+前往 https://render.com 并用 GitHub 登录
 
-### 步骤 2：在 Render 平台连接
+### 步骤 2：创建 Web Service
 
-1. 访问 https://render.com
-2. 用 GitHub 登录
-3. 点击 `New +` → `Web Service`
-4. 选择你的仓库
-5. 自动检测 Python
-6. 点击 `Create Web Service`
+1. 点击 `New +` → `Web Service`
+2. 选择你的仓库 `quant-platform`
+3. 配置：
+   - **Build Command**: `pip install -r requirements_gcp.txt`
+   - **Start Command**: `python main.py`
+4. 添加环境变量（同上）
+5. 点击 `Create Web Service`
 
 ### 步骤 3：自动部署
 
@@ -73,113 +92,95 @@ git push -u origin main
 
 ---
 
-## 方案 3：GitHub Actions 自动部署到服务器
+## 🎯 方案 3：本地运行（开发模式）
 
-如果你有云服务器（AWS/GCP/阿里云）：
-
-### 创建 workflow 文件
+### 启动量化终端
 
 ```bash
-mkdir -p .github/workflows
+cd C:\Users\huangruiran\ai_test
+python dashboard.py
 ```
 
-创建 `.github/workflows/deploy.yml`：
-
-```yaml
-name: Deploy to Production
-
-on:
-  push:
-    branches: [main]
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-      
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-      
-      - name: Deploy to server
-        run: |
-          # 这里添加你的部署命令
-          echo "Deploying..."
+或双击：
+```
+Launch_Dashboard.bat
 ```
 
 ---
 
-## 🎯 最快命令组合
+## ⚡ 快速命令参考
 
 ```bash
-# 1. 安装 CLI
+# 安装 Railway CLI（已完成）
 npm i -g @railway/cli
 
-# 2. 登录
+# 登录
 railway login
 
-# 3. 部署
+# 查看项目状态
+railway status
+
+# 部署
 railway up
 
-# 4. 绑定域名
-railway domain
-```
+# 查看日志
+railway logs
 
-**完成！** 🎉
+# 设置环境变量
+railway variables set KEY=value
+
+# 绑定自定义域名
+railway domain add your-domain.com
+```
 
 ---
 
-## ⚠️ 注意事项
+## 🔐 安全提醒
 
-### 环境变量
+以下文件已被 .gitignore 保护，**不会被上传**：
 
-如果你的项目需要 API Key（如 OpenAI、Google Cloud）：
+- `.env` - 环境变量
+- `singularity_key` - API 密钥
+- `*.log` - 日志文件
+- `*.csv` - 数据缓存
+
+部署前请确保在平台设置好环境变量！
+
+---
+
+## 📊 部署后检查清单
+
+- [ ] 环境变量已设置
+- [ ] 网站可以访问
+- [ ] 日志无错误
+- [ ] 数据库连接正常
+- [ ] API 调用正常
+
+---
+
+## 🆘 故障排除
+
+### 部署失败
 
 ```bash
-railway variables set OPENAI_API_KEY=xxx
-railway variables set GOOGLE_APPLICATION_CREDENTIALS=xxx
+# 查看详细日志
+railway logs --lines 100
 ```
 
-### 数据库
-
-Railway 支持一键添加数据库：
+### 本地测试部署
 
 ```bash
-railway add postgres
-# 或
-railway add redis
+# 安装依赖
+pip install -r requirements_gcp.txt
+
+# 运行
+python main.py
 ```
 
 ---
 
-## 📊 平台对比
+## 🎉 完成！
 
-| 平台 | 免费额度 | 优点 | 缺点 |
-|------|----------|------|------|
-| Railway | $5/月 | 最简单，自动识别 | 免费额度有限 |
-| Render | 免费层 | 永久免费，支持 Python | 资源有限 |
-| Vercel | 免费 | 速度快 | 不适合 Python 后端 |
-| Cloudflare Pages | 免费 | CDN 强大 | 只适合前端 |
+现在你的量化平台已经部署到云端！
 
----
-
-## 🎁 终极建议
-
-对于你的 **量化交易平台**：
-
-```
-GitHub (代码托管)
-   ↓
-Railway (自动部署)
-   ↓
-https://your-quant-platform.railway.app
-```
-
-**每次 push 自动部署**，完全自动化！
+**访问地址**: `https://你的项目.railway.app` 或 `https://你的项目.onrender.com`
