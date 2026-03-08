@@ -195,18 +195,52 @@ def _from_akshare_hist(symbol: str, start_date: str = "20250101") -> pd.DataFram
     return df
 
 
+import requests
+
+def _from_zyte_cloud() -> pd.DataFrame:
+    """
+    [GITHUB STUDENT PACK] 接入 Zyte Scrapy Cloud (项目 852723)。
+    在云端完成高匿名抓取，本地仅通过 API 读取结果。
+    """
+    api_key = os.getenv("ZYTE_API_KEY", "2d3e532e8c234fa58a189fb5d79e75bb")
+    project_id = "852723"
+    # 获取该项目最后一次运行抓取到的 items
+    url = f"https://storage.scrapinghub.com/items/{project_id}/last?format=json&apikey={api_key}"
+    
+    try:
+        logger.info(f"[ZYTE] 📡 正在尝试从云端同步最新抓取结果 (Project {project_id})...")
+        # 设置 10 秒超时，防止云端网络波动阻塞本地主程序
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+        
+        if not data or len(data) == 0:
+            logger.warning("[ZYTE] 云端数据池目前为空，请确保已运行 'shub schedule stock_spider'")
+            raise ValueError("Empty cloud data")
+            
+        df = pd.DataFrame(data)
+        # 归一化字段名
+        rename_map = {"代码": "代码", "名称": "名称", "最新价": "最新价", "涨跌幅": "涨跌幅", "成交额": "成交额", "换手率": "换手率"}
+        df = df.rename(columns=rename_map)
+        logger.info(f"[ZYTE] ✅ 成功获取云端数据，共计 {len(df)} 支股票快照")
+        return df
+    except Exception as e:
+        logger.debug(f"[ZYTE] 无法同步云端数据 ({e})，正在切换到本地备用源...")
+        raise
+
 # ─── 公开 API ─────────────────────────────────────────────────────────────────
 
 def get_realtime_quotes(force_refresh: bool = False) -> pd.DataFrame:
     """
     获取全市场实时行情（标准化格式）。
-    内存缓存5分钟，自动多源切换，优先顺序：新浪财经 -> baostock。
+    内存缓存5分钟，自动多源切换，优先顺序：Zyte云端 -> 新浪 -> Baostock。
     """
     if not force_refresh and _cache_valid("realtime"):
         logger.info("[CACHE] 使用内存缓存实时行情")
         return _mem_cache["realtime"][1]
 
     sources = [
+        ("Zyte云端", _from_zyte_cloud),
         ("新浪财经", _from_sina),
         ("baostock批量", _from_baostock_batch),
     ]
