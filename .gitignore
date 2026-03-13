@@ -3,6 +3,8 @@
 
 # 1. 密钥文件 (绝对禁止上传)
 .env
+.env.*
+!.env.example
 *.key
 singularity_key
 singularity_key.pub
@@ -15,11 +17,13 @@ omni_matrix_snap.csv
 last_market_snap.csv
 cloud_decision.json
 tuning_data.jsonl
+src/chats/
 
 # 3. Python 虚拟环境
 .venv/
 __pycache__/
 *.pyc
+.pytest_cache/
 
 # 4. 系统与工具
 .DS_Store
@@ -35,3 +39,4 @@ build/
 # 6. 备份文件
 *.tar.gz
 *.bak
+htmlcov/
