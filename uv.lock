@@ -11,7 +11,7 @@ resolution-markers = [
 ]
 
 [[package]]
-name = "ai-test"
+name = "quant-platform-windows"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
