@@ -1,3 +1,6 @@
+"""
+Main module for quant_master.py.
+"""
 
 import os
 import sys

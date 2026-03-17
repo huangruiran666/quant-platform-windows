@@ -1,3 +1,6 @@
+"""
+Main module for dashboard.py.
+"""
 
 import tkinter as tk
 from tkinter import ttk, scrolledtext, messagebox

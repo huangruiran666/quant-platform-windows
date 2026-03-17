@@ -1,3 +1,6 @@
+"""
+Main module for gcp_init.py.
+"""
 
 from google.cloud import bigquery
 from google.api_core import exceptions

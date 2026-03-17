@@ -1,3 +1,6 @@
+"""
+Main module for gcp_burn_money.py.
+"""
 
 from clients import get_bq_client, GCP_PROJECT
 

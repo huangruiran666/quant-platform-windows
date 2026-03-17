@@ -1,3 +1,6 @@
+"""
+Main module for ai_search_quant.py.
+"""
 import os
 import akshare as ak
 from azure.core.credentials import AzureKeyCredential
